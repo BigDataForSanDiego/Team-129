@@ -6,13 +6,21 @@ from collections import Counter
 MAXLAT = 256
 MAXLONG = 256
 
-def gen_medications(max_meds=10, lifespan_mean=25, lifespan_std=10, lifespan_min=5):
-    medicine = set(['{:04x}'.format(np.random.randint(0, 0xFFFF)) for _ in range(max_meds)])
+def gen_colors(med_count):
+    start_rgb = np.array([30, 30, 30])
+    end_rgb = np.array([245, 245, 245])
+    return np.random.randint(start_rgb, end_rgb + 1, size=(med_count, 3))
+
+def gen_medications(med_count=10, lifespan_mean=25, lifespan_std=10, lifespan_min=5):
+    random_rgb_colors = gen_colors(med_count)
+    medicine = set(['#{:02x}{:02x}{:02x}'.format(r, g, b) for r, g, b in random_rgb_colors])
+
     # ensures there are max_meds unique values
-    while len(medicine) < max_meds: medicine.add('{:04x}'.format(np.random.randint(0, 0xFFFF)))
+    while len(medicine) < med_count: 
+        medicine.add('#{:02x}{:02x}{:02x}'.format(r, g, b) for r, g, b in gen_colors(med_count - len(medicine)))
     medicine = list(medicine)
 
-    lifespan = np.random.normal(lifespan_mean, lifespan_std, max_meds)
+    lifespan = np.random.normal(lifespan_mean, lifespan_std, med_count)
     lifespan = np.round(np.maximum(lifespan, lifespan_min))
 
     meds_df = pd.DataFrame({
