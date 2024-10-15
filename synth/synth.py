@@ -6,7 +6,6 @@ from collections import Counter
 MAXLAT = 256
 MAXLONG = 256
 
-# %%
 def gen_medications(max_meds=10, lifespan_mean=25, lifespan_std=10, lifespan_min=5):
     medicine = set(['{:04x}'.format(np.random.randint(0, 0xFFFF)) for _ in range(max_meds)])
     # ensures there are max_meds unique values
@@ -23,7 +22,7 @@ def gen_medications(max_meds=10, lifespan_mean=25, lifespan_std=10, lifespan_min
 
     return meds_df
 
-def gen_clients(medicine ,client_count=100, MAXLAT=MAXLAT, MAXLONG=MAXLONG, MAX_DOSAGE=3):
+def gen_clients(medicine, client_count=100, MAXLAT=MAXLAT, MAXLONG=MAXLONG, MAX_DOSAGE=3):
     latitudes = np.random.randint(0, MAXLAT, client_count)
     longitudes = np.random.randint(0, MAXLONG, client_count)
 
@@ -65,16 +64,12 @@ def assign_pharmacies(cs_df, rx_df):
 
     return cs_df
 
-def find_pharmacy_demand(cd_df, rx_df):
+def find_pharmacy_demand(cs_df, rx_df):
     # Sort by assigned pharmacy
     total_cs_df = cs_df[['Assigned_Pharmacy','Medicine','Dosage']].groupby(['Assigned_Pharmacy','Medicine']).sum().reset_index().set_index('Assigned_Pharmacy')
-    total_cs_df.head()
-
     merged_df = pd.merge(rx_df, total_cs_df, right_index=True, left_index=True, how='left')
-    merged_df.sample(5)
 
     # Assign each pharmacy a list of medications that are required
-    from collections import Counter
 
     # use assigned_pharmacy in cs_df to get the pharmacy name, and then get the medicine
     # turn that into a counter and then into a dataframe into demand
@@ -89,8 +84,4 @@ def find_pharmacy_demand(cd_df, rx_df):
     pharmacy_df['Demand'] = demand_agg
     pharmacy_df = pharmacy_df.drop(columns=['Medicine', 'Dosage'])
 
-    # Display the result
-    pharmacy_df.reset_index()
-
-
-
+    return pharmacy_df
