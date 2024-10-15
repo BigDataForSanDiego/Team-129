@@ -65,38 +65,32 @@ def assign_pharmacies(cs_df, rx_df):
 
     return cs_df
 
+def find_pharmacy_demand(cd_df, rx_df):
+    # Sort by assigned pharmacy
+    total_cs_df = cs_df[['Assigned_Pharmacy','Medicine','Dosage']].groupby(['Assigned_Pharmacy','Medicine']).sum().reset_index().set_index('Assigned_Pharmacy')
+    total_cs_df.head()
 
-# TODO: ryan fix this plz
+    merged_df = pd.merge(rx_df, total_cs_df, right_index=True, left_index=True, how='left')
+    merged_df.sample(5)
 
+    # Assign each pharmacy a list of medications that are required
+    from collections import Counter
 
-# %%
-# Sort by assigned pharmacy
-total_cs_df = cs_df[['Assigned_Pharmacy','Medicine','Dosage']].groupby(['Assigned_Pharmacy','Medicine']).sum().reset_index().set_index('Assigned_Pharmacy')
-total_cs_df.head()
+    # use assigned_pharmacy in cs_df to get the pharmacy name, and then get the medicine
+    # turn that into a counter and then into a dataframe into demand
+    def calculate_demand(group):
+        return Counter({medicine: group.loc[group['Medicine'] == medicine, 'Dosage'].sum() for medicine in group['Medicine'].unique()})
 
-# %%
-merged_df = pd.merge(rx_df, total_cs_df, right_index=True, left_index=True, how='left')
-merged_df.sample(5)
+    # Apply the function to group by pharmacy ('Name') and calculate demand
+    demand_agg = merged_df.groupby('Name').apply(calculate_demand)
 
-# %%
-# Assign each pharmacy a list of medications that are required
-from collections import Counter
+    # Assign the aggregated demand back to the original DataFrame
+    pharmacy_df = merged_df.drop_duplicates(subset='Name').set_index('Name')
+    pharmacy_df['Demand'] = demand_agg
+    pharmacy_df = pharmacy_df.drop(columns=['Medicine', 'Dosage'])
 
-# use assigned_pharmacy in cs_df to get the pharmacy name, and then get the medicine
-# turn that into a counter and then into a dataframe into demand
-def calculate_demand(group):
-    return Counter({medicine: group.loc[group['Medicine'] == medicine, 'Dosage'].sum() for medicine in group['Medicine'].unique()})
-
-# Apply the function to group by pharmacy ('Name') and calculate demand
-demand_agg = merged_df.groupby('Name').apply(calculate_demand)
-
-# Assign the aggregated demand back to the original DataFrame
-pharmacy_df = merged_df.drop_duplicates(subset='Name').set_index('Name')
-pharmacy_df['Demand'] = demand_agg
-pharmacy_df = pharmacy_df.drop(columns=['Medicine', 'Dosage'])
-
-# Display the result
-pharmacy_df.reset_index()
+    # Display the result
+    pharmacy_df.reset_index()
 
 
 
