@@ -1,15 +1,15 @@
 ### 2025 BIG DATA HACKATHON PROPOSAL FORM
 
-#### Team Number: `YOUR TEAM NUMBER HERE`  
+#### Team Number: `Team 129`  
 
-#### Team Name: `YOUR TEAM NAME HERE`    
+#### Team Name: `Standard Deviants`    
 
-#### Team Coordinator GitHub Username: `YOUR TEAM COORDINATOR GITHUB USERNAME HERE`
+#### Team Coordinator GitHub Username: `AlejandraUrias`
 
-#### Team Members `YOUR TEAM MEMBERS NAME & GITHUB USERNAME HERE`
+#### Team Members `Dereck Vargas Jauregui (DereckVJ), Gesselle Lopez (gesselle5)`
 
-#### Your teamâ€™s hackathon idea in One sentence:
-##### `YOUR ONE SENTENCE HERE`
+#### Your team's hackathon idea in One sentence:
+##### `We propose a website that gathers data from the resources available to the unsheltered (such as food distributions, shelters, safe sleeping, etc), which would be reported to organizations and city management entities for strategy solutions; the website would have a user-friendly interface showing real-time availability of such resources near them.`
 
 #### A visual
 ![bigdatahackathon4sd](https://github.com/BigDataForSanDiego/bigdataforsandiego.github.io/blob/main/images/big_data_2025_clip.png?raw=true "Big Data Hackathon for San Diego 2025")
@@ -18,7 +18,7 @@
 
 
 #### Hackathon Five CORE Themes. `CHECK ONE or TWO QUESTIONS (insert X in [ ])`.
-- [ ] Access to Shelter and Resources
+- [x] Access to Shelter and Resources
 > - Solutions to improve on-demand access and availability of shelters, food banks, medical aid, and social services for homeless individuals.
 > - Question: How can we develop technological solutions that provide real-time, on-demand information updates on available shelters, food banks, hygiene stations, medical clinics, and social services for people experiencing homelessness?
 - [ ] Health and Mental Wellness Support
